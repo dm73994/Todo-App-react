@@ -18,6 +18,8 @@ import SideBarOption from './SideBarOption';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
+import UserProvider from '../../auth/user/UserProvider';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 const drawerWidth = 240;
 
@@ -25,39 +27,50 @@ const SideBar = ({ children }) => {
     const window = undefined;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
+    const user = React.useContext(UserProvider)
+
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
     const options = [
         {
-            title: 'my tasks',
+            title: 'my lists',
             icon: <FormatListBulletedRoundedIcon />,
-            to: '/tasks'
+            to: '/lists'
         },
+        user != undefined && 
         {
             title: 'categories',
             icon: <CategoryRoundedIcon />,
             to: '/categories'
-        },
+        }
     ];
 
     const authOptions = [
+        user != undefined ? 
         {
             title: 'log out',
             icon: <ExitToAppRoundedIcon />,
-            to: '/auth/logout'
-        },
+            to: '/auth/login'
+        }
+        :
+        {
+            title: 'Create account',
+            icon: <VpnKeyIcon />,
+            to: '/auth/register'
+        }
+
     ];
 
     const drawer = (
-        <div>
+        <>
             <Toolbar />
             <Divider />
             <List>
                 {
                     options.map((option) => (
-                        <SideBarOption option={option} />
+                        <SideBarOption key={option.title} option={option} />
                     ))
                 }
             </List>
@@ -65,11 +78,11 @@ const SideBar = ({ children }) => {
             <List>
                 {
                     authOptions.map((option) => (
-                        <SideBarOption option={option} />
+                        <SideBarOption key={option.title} option={option} />
                     ))
                 }
             </List>
-        </div>
+        </>
     );
 
     const container = window !== undefined ? () => window().document.body : undefined;

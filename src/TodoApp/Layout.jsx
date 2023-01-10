@@ -41,7 +41,7 @@ const Layout = ({ children, title, actions }) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="h6" noWrap >
                         {title}
                     </Typography>
                 </Toolbar>

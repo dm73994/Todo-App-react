@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material'
 import React from 'react'
 
 const Layout = ({ title, children }) => {
-    console.log(title)
+
   return (
     <Grid container 
         sx={{
@@ -22,7 +22,8 @@ const Layout = ({ title, children }) => {
                 borderRadius: 2
             }} 
             className={'box-shadow'} 
-            xs={6}
+            xs={12}
+            sm={6}
         >
             <Typography > {title} </Typography>
             {children}
