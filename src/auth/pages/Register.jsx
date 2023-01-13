@@ -4,15 +4,32 @@ import { Link as NavLink } from 'react-router-dom'
 import { RegisterSchema, defaultRegisterValues } from './RegisterSchema'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import DialogComponent from '../../components/DialogComponent';
+import { useEffect, useState } from 'react';
+import { Audio, FidgetSpinner } from 'react-loader-spinner'
+import { useAxios } from '../../hooks/useAxios';
+
 
 const Register = () => {
+  
+  const [res, setRes] = useState(null);
+  const axios = useAxios();
+  const [seeRes, setSeeRes] = useState(false)
+
   const {handleSubmit, register, control, formState: { errors }} = useForm({
     defaultValues: defaultRegisterValues,
     resolver: yupResolver(RegisterSchema)
   })
 
-  const onSubmit = (data)=> {
-    console.log(data)
+  const onSubmit = async(data)=> {
+    setRes(null);
+    setSeeRes(true);
+    try{
+      axios.post('/users/register', data)
+      setRes(axios.response)
+    }catch(err){
+      setRes(err);
+    }
   }
 
   return (
@@ -67,6 +84,12 @@ const Register = () => {
 
         </Grid>
       </form>
+
+      
+        <DialogComponent message={res} watch={seeRes} /> 
+      
+      <p>{axios.error}</p>
+      <FidgetSpinner height={50} width={50} visible={axios.loading}  />
 
     </Layout>
   )

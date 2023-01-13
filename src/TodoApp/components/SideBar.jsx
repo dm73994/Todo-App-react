@@ -20,6 +20,7 @@ import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import UserProvider from '../../auth/user/UserProvider';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import { UserContext } from '../../auth/user/UserContext';
 
 const drawerWidth = 240;
 
@@ -27,7 +28,7 @@ const SideBar = ({ children }) => {
     const window = undefined;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    const user = React.useContext(UserProvider)
+    const user = React.useContext(UserContext)
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -39,7 +40,7 @@ const SideBar = ({ children }) => {
             icon: <FormatListBulletedRoundedIcon />,
             to: '/lists'
         },
-        user != undefined && 
+        user.user != undefined && 
         {
             title: 'categories',
             icon: <CategoryRoundedIcon />,
@@ -48,11 +49,12 @@ const SideBar = ({ children }) => {
     ];
 
     const authOptions = [
-        user != undefined ? 
+        user.user != undefined ? 
         {
             title: 'log out',
             icon: <ExitToAppRoundedIcon />,
-            to: '/auth/login'
+            to: '/auth/logout',
+            action: user.logout
         }
         :
         {

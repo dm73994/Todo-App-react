@@ -4,18 +4,24 @@ import { useForm } from 'react-hook-form';
 import { Link as NavLink, useNavigate, useNavigation } from 'react-router-dom'
 import { LoginSchema, defaultLoginValues } from './LoginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useContext, useState } from 'react';
+import { useAxios } from '../../hooks/useAxios';
+import { FidgetSpinner } from 'react-loader-spinner';
+import UserProvider from '../user/UserProvider';
+import { UserContext } from '../user/UserContext';
 
 
 const Login = () => {
 
   const navigate = useNavigate();
 
+  const [res, setRes] = useState(null);
+  const axios = useAxios();
+  const [seeRes, setSeeRes] = useState(false)
+  const userContext = useContext(UserContext);
+
   const handleGuest = () => {
     navigate('/lists');
-  }
-
-  const handleLogin = () => {
-
   }
 
   const {handleSubmit, register, control, formState: { errors }} = useForm({
@@ -23,8 +29,20 @@ const Login = () => {
     resolver: yupResolver(LoginSchema)
   })
 
-  const onSubmit = (data) => {
-    console.log(data);
+
+  const onSubmit = async(data)=> {
+    setRes(null);
+    setSeeRes(true);
+    try{
+      axios.post('/users/login', data)
+      setRes(axios.response)
+      
+      userContext.login( axios.response.data.user );
+      navigate('/lists', {replace: true})
+
+    }catch(err){
+      setRes(err);
+    }
   }
 
   return (
@@ -71,6 +89,9 @@ const Login = () => {
 
         </Grid>
       </form>
+
+      <p>{axios.error}</p>
+      <FidgetSpinner height={50} width={50} visible={axios.loading}  />
 
     </Layout>
   )

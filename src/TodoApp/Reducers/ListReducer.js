@@ -16,8 +16,6 @@ export const ListReducer = ( state = initialState, action ) => {
 
                 // payload cargado con id
                 if ( list.id === action.payload ) {
-                    console.log(list.title)
-                    console.log(list.privacy)
                     return {
                         ...list,
                         privacy: !list.privacy
@@ -32,8 +30,6 @@ export const ListReducer = ( state = initialState, action ) => {
 
                 // payload cargado con id
                 if ( list.id === action.payload ) {
-                    console.log(list.title)
-                    console.log(list.privacy)
                     return {
                         ...list,
                         status: !list.status
